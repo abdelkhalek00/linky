@@ -10,22 +10,18 @@ export let PostsContext = createContext()
 
 
 export default function PostsContextProvider({ children }) {
-
-
     const [allPosts, setAllPosts] = useState([])
     async function getallPosts() {
         let response = await getAllPostsAPi();
         console.log(response)
         setAllPosts(response.posts)
     }
-
-
     useEffect(()=>{
         getallPosts()
     },[])
 
 
-    return <PostsContext.Provider value={{ allPosts }}>
+    return <PostsContext.Provider value={{ allPosts,getallPosts }}>
         {children}
     </PostsContext.Provider>
 }
