@@ -7,7 +7,7 @@ export default function NavbarComponent() {
   let { userData } = useContext(AuthContext)
   return (
     <>
-      <Navbar shouldHideOnScroll>
+      <Navbar shouldHideOnScroll className="bg-gray-950">
         <NavbarBrand>
           <Link to={'/'}>
             <p className="font-bold text-xl text-sky-900">Linkey</p>

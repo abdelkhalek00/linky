@@ -57,7 +57,7 @@ export default function EditPost() {
     }
 
     return (
-        <div className="w-full bg-[#1D293D] rounded-2xl relative p-5">
+        <div className="w-full bg-slate-950 rounded-2xl relative p-5">
             {isLoading && <div className='absolute inset-0 bg-white/40 flex justify-center items-center z-10'>
                 <Spinner /></div>}
             <form onSubmit={updatePost}>

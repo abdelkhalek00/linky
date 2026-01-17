@@ -9,13 +9,15 @@ import DropDownCommentComponent from './DropDownCommentComponent'
 import { AiOutlineLike } from 'react-icons/ai'
 import { BiComment } from 'react-icons/bi'
 import { GoShareAndroid } from 'react-icons/go'
+import toastr from "toastr";
+import "toastr/build/toastr.min.css";
 
 
 export default function PostFooter({ post }) {
     const [comments, setComments] = useState(post.comments)
     const { pathname } = useLocation()
     const [isLoading, setIsLoading] = useState(false)
-    const [commentContent, setCommentContent] = useState()
+    const [commentContent, setCommentContent] = useState("")
     const { userData } = useContext(AuthContext)
     const [isEditing, setIsEditing] = useState(false)
     const [editCommentId, setEditCommentId] = useState(null)
@@ -28,19 +30,25 @@ export default function PostFooter({ post }) {
 
     async function addComment(e) {
         e.preventDefault()
-        setIsLoading(true)
-        try {
-            const response = await addCommentApi(commentContent, post.id)
-            console.log(response)
-            if (response.message) {
-                setCommentContent('')
-                setComments(response.comments)
-            }
+        if (commentContent.length == 0) {
+            toastr.error("This Field Mustn't be Empty")
+            return;
+        }
+        else {
+            setIsLoading(true)
+            try {
+                const response = await addCommentApi(commentContent, post.id)
+                console.log(response)
+                if (response.message) {
+                    setCommentContent('')
+                    setComments(response.comments)
+                }
 
-        } catch (err) {
-            console.log(err)
-        } finally {
-            setIsLoading(false)
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setIsLoading(false)
+            }
         }
     }
     function handleUpdateComment(comment) {
@@ -86,9 +94,9 @@ export default function PostFooter({ post }) {
             <div className="flex justify-between items-center w-full px-5 pb-3 my-3 border-b-1 border-slate-700">
                 <button className="flex justify-center items-center w-full space-x-3 max-md:space-x-1.5"><AiOutlineLike className='text-gray-500 text-3xl max-md:text-2xl' />
                     <span className="font-semibold text-lg max-sm:text-sm max-md:text-md text-gray-600">Like</span></button>
-                <button className="flex justify-center items-center w-full space-x-3 max-md:space-x-1.5"><BiComment className='text-gray-500 text-3xl max-md:text-2xl'  />
+                <button className="flex justify-center items-center w-full space-x-3 max-md:space-x-1.5"><BiComment className='text-gray-500 text-3xl max-md:text-2xl' />
                     <span className="font-semibold text-lg max-sm:text-sm max-md:text-md text-gray-600">Comments</span></button>
-                <button className="flex justify-center items-center w-full space-x-3 max-md:space-x-1.5"><GoShareAndroid className='text-gray-500 text-3xl max-md:text-2xl'  />
+                <button className="flex justify-center items-center w-full space-x-3 max-md:space-x-1.5"><GoShareAndroid className='text-gray-500 text-3xl max-md:text-2xl' />
                     <span className="font-semibold text-lg max-sm:text-sm max-md:text-md text-gray-600">Share</span></button>
             </div>
 
@@ -104,7 +112,7 @@ export default function PostFooter({ post }) {
             {pathname.includes('post-details') ? comments.map((comment) =>
                 comments.length > 0 && <div key={comment._id} className="w-full flex mt-5 mb-2">
                     <img className=" rounded-full w-8 h-8 me-2 p-0.5 bg-white" onError={(e) => e.currentTarget.src = commentProfile} src={comment?.commentCreator?.photo} />
-                    <div className='bg-slate-700 py-1 ps-4 pe-6 rounded-xl'>
+                    <div className='bg-slate-900 py-1 ps-4 pe-6 rounded-xl'>
                         <div className="flex">
                             <h3 className="text-md font-semibold text-white">{comment?.commentCreator?.name}</h3>
                             {userData._id === post.user._id && userData._id === comment.commentCreator._id &&
@@ -118,7 +126,7 @@ export default function PostFooter({ post }) {
                 comments.length > 0 && <div className="w-full items-center flex justify-between pt-2">
                     <div className="flex">
                         <img className=" rounded-full w-8 h-8 me-2 p-0.5 bg-white" onError={(e) => e.currentTarget.src = commentProfile} src={comments[0]?.commentCreator?.photo} />
-                        <div className='bg-slate-700 py-1 ps-4 pe-6 rounded-xl'>
+                        <div className='bg-slate-900 py-1 ps-4 pe-6 rounded-xl'>
                             <div className="flex">
                                 <h3 className="text-md font-semibold text-white -mb-1">{comments[0]?.commentCreator?.name}</h3>
                                 {userData._id === post.user._id && userData._id === comments[0].commentCreator._id &&

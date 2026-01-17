@@ -8,27 +8,36 @@ import { MdEdit } from "react-icons/md";
 import { PostsContext } from '../Context/PostsContext';
 export default function UserInfo() {
   const { userData } = useContext(AuthContext)
-  const [isFollowed, setIsFollowed] = React.useState(false);
+  const [isFollowed, setIsFollowed] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [userPosts, setUserPosts] = useState([])
 
   async function getUserPosts() {
     if (!userData?._id) {
       return;
     }
-    const response = await getUserPostsApi(userData._id)
-    // console.log(response)
-    if (response.message) {
-      setUserPosts(response.posts)
+    try {
+      const response = await getUserPostsApi(userData._id)
+      // console.log(response)
+      if (response.message) {
+        setUserPosts(response.posts)
+      }
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setIsLoading(false)
     }
   }
   useEffect(() => {
-    getUserPosts()
-  }, [userData, userPosts])
+    if (userData && userData._id) {
+      getUserPosts()
+    }
+  }, [userData,userPosts])
   return (
     <>
 
       <div className="w-full rounded-xl h-auto py-5 px-3 my-4">
-        <Card className="w-full mx-auto bg-slate-900 mb-15 shadow-2xl">
+        <Card className="w-full mx-auto bg-slate-950 mb-15 shadow-2xl">
           <CardHeader className="flex justify-between flex-wrap">
             <div className="flex gap-5 max-md:mb-3">
               <Avatar className='ms-1'
@@ -54,7 +63,7 @@ export default function UserInfo() {
           <CardBody className="px-3 py-0 text-small text-default-400 overflow-hidden space-y-2">
             <div className="flex gap-1 items-center">
               <p className=''>Profile Created At: </p>
-              <p className='font-bold text-white/80 lg'>{userData?.createdAt.split("T")[0]}</p>
+              <p className='font-bold text-white/80 lg'>{userData?.createdAt?.split("T")[0]}</p>
             </div>
             <div className="flex gap-1 items-center">
               <p className=''>Birth Of Date: </p>
@@ -68,12 +77,9 @@ export default function UserInfo() {
             </div>
           </CardFooter>
         </Card>
-        {userPosts.length > 0 ? userPosts.reverse().map((post) => <PostCardComponent post={post} key={post.id} />) : <SkeletonComponent />}
+        {/* {userPosts.length > 0 ? userPosts.reverse().map((post) => <PostCardComponent post={post} key={post.id} />) : <SkeletonComponent />} */}
+        {isLoading ? <SkeletonComponent /> : userPosts.length === 0 ? <div><p className='text-danger text-center'>There aren't Posts</p></div> : [...userPosts].reverse().map((post) => <PostCardComponent post={post} key={post.id} />)}
       </div>
-
-
-
-
     </>
   )
 }
