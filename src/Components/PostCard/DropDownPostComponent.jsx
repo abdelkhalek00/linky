@@ -35,7 +35,7 @@ export default function DropDownPostComponent({ post, getPostCommentsFunction })
                         <DropdownMenu aria-label="Example with disabled actions" disabledKeys={[]}>
                             <DropdownItem key="edit" onClick={()=>navigate(`/edit-post/${post._id}`)}>Edit Post</DropdownItem>
                             <DropdownItem key="delete" onClick={() => { deletePost(post.id) }} className="text-danger" color="danger">
-                                Delete file
+                                Delete Post
                             </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>

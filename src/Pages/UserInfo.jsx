@@ -5,6 +5,7 @@ import { getUserPostsApi } from '../API_Requests/API_Requests';
 import SkeletonComponent from '../Components/SkeletonComponent';
 import PostCardComponent from '../Components/PostCardComponent';
 import { MdEdit } from "react-icons/md";
+import { PostsContext } from '../Context/PostsContext';
 export default function UserInfo() {
   const { userData } = useContext(AuthContext)
   const [isFollowed, setIsFollowed] = React.useState(false);
@@ -15,14 +16,14 @@ export default function UserInfo() {
       return;
     }
     const response = await getUserPostsApi(userData._id)
-    console.log(response)
+    // console.log(response)
     if (response.message) {
       setUserPosts(response.posts)
     }
   }
   useEffect(() => {
     getUserPosts()
-  }, [userData])
+  }, [userData, userPosts])
   return (
     <>
 
