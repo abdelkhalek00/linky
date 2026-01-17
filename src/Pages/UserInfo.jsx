@@ -62,10 +62,6 @@ export default function UserInfo() {
             </div>
           </CardBody>
           <CardFooter className="gap-3">
-            {/* <div className="flex gap-1">
-              <p className="font-semibold text-default-400 text-small">Created At: </p>
-              <p className="text-default-400 text-small">{userData?.createdAt}</p>
-            </div> */}
             <div className="flex gap-1 items-center">
               <p className="font-semibold text-md text-secondary">{userPosts?.length}</p>
               <p className="text-small text-default-400">Posts</p>
