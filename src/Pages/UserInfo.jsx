@@ -37,7 +37,7 @@ export default function UserInfo() {
     <>
 
       <div className="w-full rounded-xl h-auto py-5 px-3 my-4">
-        <Card className="w-full mx-auto bg-slate-950 mb-15 shadow-2xl">
+        <Card className="w-full mx-auto bg-slate-100 dark:bg-slate-950 mb-15 shadow-2xl">
           <CardHeader className="flex justify-between flex-wrap">
             <div className="flex gap-5 max-md:mb-3">
               <Avatar className='ms-1'
@@ -47,7 +47,7 @@ export default function UserInfo() {
                 src={userData?.photo}
               />
               <div className="flex flex-col gap-1 items-start justify-center">
-                <h4 className="text-xl font-semibold leading-none text-white">{userData?.name}</h4>
+                <h4 className="text-xl font-semibold leading-none text-slate-950 dark:text-white">{userData?.name}</h4>
                 <h5 className="text-small tracking-tight text-secondary">{userData?.email}</h5>
               </div>
             </div>
@@ -62,18 +62,18 @@ export default function UserInfo() {
           </CardHeader>
           <CardBody className="px-3 py-0 text-small text-default-400 overflow-hidden space-y-2">
             <div className="flex gap-1 items-center">
-              <p className=''>Profile Created At: </p>
-              <p className='font-bold text-white/80 lg'>{userData?.createdAt?.split("T")[0]}</p>
+              <p className='text-slate-800 dark:text-white/80'>Profile Created At: </p>
+              <p className='font-bold text-slate-800 dark:text-white/80 lg'>{userData?.createdAt?.split("T")[0]}</p>
             </div>
             <div className="flex gap-1 items-center">
-              <p className=''>Birth Of Date: </p>
-              <p className='font-bold text-white/80 lg'>{userData?.dateOfBirth}</p>
+              <p className='text-slate-800 dark:text-white/80'>Birth Of Date: </p>
+              <p className='font-bold text-slate-800 dark:text-white/80 lg'>{userData?.dateOfBirth}</p>
             </div>
           </CardBody>
           <CardFooter className="gap-3">
             <div className="flex gap-1 items-center">
               <p className="font-semibold text-md text-secondary">{userPosts?.length}</p>
-              <p className="text-small text-default-400">Posts</p>
+              <p className="text-small text-slate-800 dark:text-white/80">Posts</p>
             </div>
           </CardFooter>
         </Card>

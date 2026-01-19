@@ -2,9 +2,13 @@ import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Avatar } from "
 import React, { useContext, useState } from 'react'
 import { NavLink, useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
+import { MdOutlineLightMode } from "react-icons/md";
+import { ThemeContext } from "../Context/ThemeContext";
+import { FaMoon } from "react-icons/fa";
 
 export default function NavbarComponent() {
-  let { userData,setUserData,isLoggedIn,setIsLoggedIn } = useContext(AuthContext)
+  let { userData, setUserData, isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
+  let {theme,setTheme } = useContext(ThemeContext)
   const navigate = useNavigate()
   function logout() {
     localStorage.removeItem('token')
@@ -12,9 +16,21 @@ export default function NavbarComponent() {
     setUserData(null)
     navigate('/login')
   }
+
+
+  function handleThemMode(){
+    if(localStorage.getItem('theme')=='light'){
+      localStorage.setItem('theme','dark')
+      setTheme('dark')
+    }
+    else{
+      localStorage.setItem('theme','light')
+      setTheme('light')
+    }
+  }
   return (
     <>
-      <Navbar shouldHideOnScroll className="bg-gray-950">
+      <Navbar shouldHideOnScroll className="bg-slate-200 dark:bg-gray-950">
         <NavbarBrand>
           <Link to={'/'}>
             <p className="font-bold text-xl text-sky-900">Linkey</p>
@@ -23,9 +39,33 @@ export default function NavbarComponent() {
         <NavbarContent className="hidden sm:flex gap-6" justify="center">
         </NavbarContent>
         <NavbarContent justify="end">
-          {isLoggedIn!=null ?
+
+
+
+          {isLoggedIn != null ?
+            <NavbarItem className="flex items-center cursor-pointer space-x-0.5">
+              <Link to={'/user-info'}>
+                <div className=" rounded-full p-0.5 border-3 border-slate-400 dark:border-sky-900">
+                  <Avatar
+                    // isBordered
+                    radius="full"
+                    size="sm"
+                    src={userData?.photo}
+                  />
+                </div>
+              </Link>
+            </NavbarItem> : null}
+
+          <NavbarItem onClick={handleThemMode} className="cursor-pointer">
+            {theme=='dark'?
+            <MdOutlineLightMode className="text-yellow-400 text-2xl" />:
+            <FaMoon className="text-blue-950 text-2xl" />}
+            
+          </NavbarItem>
+
+          {isLoggedIn != null ?
             <NavbarItem onClick={logout} className="flex items-center cursor-pointer space-x-0.5 text-red-600">
-              <span>Logout</span>
+              {/* <span>Logout</span> */}
               <svg className="w-5 h-5 text-red-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2" />
               </svg>
@@ -38,20 +78,6 @@ export default function NavbarComponent() {
                 <Link className="text-success" to={'/login'}>Login</Link>
               </NavbarItem>
             </>}
-          {isLoggedIn!=null ?
-            <NavbarItem className="flex items-center cursor-pointer space-x-0.5">
-              <Link to={'/user-info'}>
-                <div className=" rounded-full p-0.5 border-3 border-sky-900">
-                  <Avatar
-                    // isBordered
-                    radius="full"
-                    size="sm"
-                    src={userData?.photo}
-                  />
-                </div>
-              </Link>
-            </NavbarItem> : null}
-
         </NavbarContent>
       </Navbar>
     </>

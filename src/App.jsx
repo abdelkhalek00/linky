@@ -15,6 +15,7 @@ import AuthLAyout from './Layout/AuthLAyout';
 import ProtectedRoute from './Layout/ProtectedRoute';
 import AuthProtectedRoute from './Layout/AuthProtectedRoute';
 import NotFoundPage from './Pages/NotFoundPage';
+import ThemeContextProvider from './Context/ThemeContext';
 toastr.options = {
   closeButton: false,
   positionClass: "toast-bottom-right",
@@ -45,7 +46,7 @@ let router = createBrowserRouter([
       { path: 'user-info', element: <ProtectedRoute><UserInfo /></ProtectedRoute> },
       { path: 'post-details/:postId', element: <ProtectedRoute><PostDetails /></ProtectedRoute> },
       { path: 'edit-post/:postId', element: <ProtectedRoute><EditPost /></ProtectedRoute> },
-      { path: '*', element:<NotFoundPage/> }
+      { path: '*', element: <NotFoundPage /> }
     ]
   },
   {
@@ -59,12 +60,14 @@ let router = createBrowserRouter([
 function App() {
 
   return <>
-    <AuthContextProvider>
-      <PostsContextProvider>
-        <RouterProvider router={router}>
-        </RouterProvider>
-      </PostsContextProvider>
-    </AuthContextProvider>
+    <ThemeContextProvider>
+      <AuthContextProvider>
+        <PostsContextProvider>
+          <RouterProvider router={router}>
+          </RouterProvider>
+        </PostsContextProvider>
+      </AuthContextProvider>
+    </ThemeContextProvider>
   </>
 }
 

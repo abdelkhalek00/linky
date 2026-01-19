@@ -50,7 +50,7 @@ export default function CreatePostComponent() {
     }
     return (
         <>
-            <div className="w-full p-5 bg-slate-950 rounded-2xl relative mb-10">
+            <div className="w-full p-5 bg-slate-100 dark:bg-slate-950 rounded-2xl relative mb-10">
                 {isLoading && <div className='absolute rounded-2xl inset-0 bg-white/10 flex justify-center items-center z-10'>
                     <Spinner /></div>}
                 <form onSubmit={createPost}>
@@ -62,7 +62,7 @@ export default function CreatePostComponent() {
                     </div>
                     }
                     <div className="flex justify-between items-center">
-                        <label className='flex cursor-pointer' htmlFor="postImage"><IoImages className='text-2xl text-green-600 me-2' /> <span className='text-white/80'>Photo</span></label>
+                        <label className='flex cursor-pointer' htmlFor="postImage"><IoImages className='text-2xl text-green-600 me-2' /> <span className='text-slate-700 dark:text-white/80'>Photo</span></label>
                         <Input onChange={handlePreviewImage} type='file' id='postImage' className='hidden' />
 
                         <Button isLoading={isLoading} color='primary' type='submit'>Post</Button>

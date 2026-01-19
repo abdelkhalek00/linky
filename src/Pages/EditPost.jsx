@@ -57,7 +57,7 @@ export default function EditPost() {
     }
 
     return (
-        <div className="w-full bg-slate-950 rounded-2xl relative p-5">
+        <div className="w-full bg-slate-100 dark:bg-slate-950 rounded-2xl relative p-5">
             {isLoading && <div className='absolute inset-0 rounded-2xl bg-white/15 flex justify-center items-center z-10'>
                 <Spinner /></div>}
             <form onSubmit={updatePost}>
@@ -75,7 +75,7 @@ export default function EditPost() {
                     </div>
                 )}
                 <div className="flex justify-between items-center mt-3">
-                    <label className='flex cursor-pointer' htmlFor="postImage"><IoImages className='text-2xl text-green-600 me-2' /> <span className='text-white/80'>Image</span></label>
+                    <label className='flex cursor-pointer' htmlFor="postImage"><IoImages className='text-2xl text-green-600 me-2' /> <span className='text-slate-700     dark:text-white/80'>Photo</span></label>
                     <Input className='hidden' type="file" id="postImage" onChange={handlePreview} />
                     <Button isLoading={isLoading} type="submit" color="primary">Update</Button>
                 </div>

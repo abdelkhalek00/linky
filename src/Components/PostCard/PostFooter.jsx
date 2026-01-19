@@ -21,6 +21,7 @@ export default function PostFooter({ post }) {
     const { userData } = useContext(AuthContext)
     const [isEditing, setIsEditing] = useState(false)
     const [editCommentId, setEditCommentId] = useState(null)
+    const [isLiked, setIsLiked] = useState(false)
     const navigate = useNavigate()
 
     async function getPostComments() {
@@ -77,7 +78,7 @@ export default function PostFooter({ post }) {
     }
     return (
         <>
-            <div className="w-full h-8 flex items-center px-3 my-3 border-b-2 pb-2 border-slate-500">
+            <div className="w-full h-8 flex items-center px-3 my-3 border-b-1 pb-2 border-slate-400 dark:border-slate-500">
                 <div className="bg-blue-500 z-10 w-5 h-5 rounded-full flex items-center justify-center ">
                     <svg className="w-3 h-3 fill-current text-white" xmlns="http://www.w3.org/2000/svg" width={27} height={27} viewBox="0 0 24 24" fill="none" stroke="#b0b0b0" strokeWidth={2} strokeLinecap="square" strokeLinejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" /></svg>
                 </div>
@@ -91,12 +92,12 @@ export default function PostFooter({ post }) {
                 </div>
             </div>
             {/* Post Actions */}
-            <div className="flex justify-between items-center w-full px-5 pb-3 my-3 border-b-1 border-slate-700">
-                <button className="flex justify-center items-center w-full space-x-3 max-md:space-x-1.5"><AiOutlineLike className='text-gray-500 text-3xl max-md:text-2xl' />
-                    <span className="font-semibold text-lg max-sm:text-sm max-md:text-md text-gray-600">Like</span></button>
-                <button className="flex justify-center items-center w-full space-x-3 max-md:space-x-1.5"><BiComment className='text-gray-500 text-3xl max-md:text-2xl' />
+            <div className="flex justify-between items-center w-full px-5 pb-3 my-3 border-b-1 border-slate-400 dark:border-slate-500">
+                <button className="flex justify-center items-center w-full space-x-3 max-md:space-x-1.5 cursor-pointer" onClick={() => { setIsLiked(!isLiked)}}><AiOutlineLike className={`text-3xl transition-all duration-200 ${isLiked ? "text-blue-700 scale-110" : "text-gray-500"}`} />
+                    <span className={`font-semibold text-lg max-sm:text-sm max-md:text-md ${isLiked ? "text-blue-700 scale-110" : "text-gray-500"}`}>Like</span></button>
+                <button className="flex justify-center items-center w-full space-x-3 max-md:space-x-1.5 cursor-pointer"><BiComment className='text-gray-500 text-3xl max-md:text-2xl' />
                     <span className="font-semibold text-lg max-sm:text-sm max-md:text-md text-gray-600">Comments</span></button>
-                <button className="flex justify-center items-center w-full space-x-3 max-md:space-x-1.5"><GoShareAndroid className='text-gray-500 text-3xl max-md:text-2xl' />
+                <button className="flex justify-center items-center w-full space-x-3 max-md:space-x-1.5 cursor-pointer"><GoShareAndroid className='text-gray-500 text-3xl max-md:text-2xl' />
                     <span className="font-semibold text-lg max-sm:text-sm max-md:text-md text-gray-600">Share</span></button>
             </div>
 
@@ -111,29 +112,29 @@ export default function PostFooter({ post }) {
 
             {pathname.includes('post-details') ? comments.map((comment) =>
                 comments.length > 0 && <div key={comment._id} className="w-full flex mt-5 mb-2">
-                    <img className=" rounded-full w-8 h-8 me-2 p-0.5 bg-white" onError={(e) => e.currentTarget.src = commentProfile} src={comment?.commentCreator?.photo} />
-                    <div className='bg-slate-900 py-1 ps-4 pe-6 rounded-xl'>
+                    <img className=" rounded-full w-8 h-8 me-2 p-0.5 bg-slate-400 dark:bg-white" onError={(e) => e.currentTarget.src = commentProfile} src={comment?.commentCreator?.photo} />
+                    <div className='bg-slate-300 dark:bg-slate-900 py-1 ps-4 pe-6 rounded-xl'>
                         <div className="flex">
-                            <h3 className="text-md font-semibold text-white">{comment?.commentCreator?.name}</h3>
+                            <h3 className="text-md font-semibold text-slate-950 dark:text-white">{comment?.commentCreator?.name}</h3>
                             {userData._id === post.user._id && userData._id === comment.commentCreator._id &&
                                 <DropDownCommentComponent comment={comment} handleUpdateComment={handleUpdateComment} getPostCommentsFunction={getPostComments} />}
                         </div>
-                        <span className='text-white/50 text-[12px] font-light -mt-2'>{comment?.createdAt.split("T")[0]}</span>
-                        <p className='text-white/80 text-md mt-1'>{comment?.content}</p>
+                        <span className='text-slate-800 dark:text-white/50 text-[12px] font-light -mt-2'>{comment?.createdAt.split("T")[0]}</span>
+                        <p className='text-slate-950 dark:text-white/80 text-md mt-1'>{comment?.content}</p>
                     </div>
                 </div>
             ) :
                 comments.length > 0 && <div className="w-full items-center flex justify-between pt-2">
                     <div className="flex">
-                        <img className=" rounded-full w-8 h-8 me-2 p-0.5 bg-white" onError={(e) => e.currentTarget.src = commentProfile} src={comments[0]?.commentCreator?.photo} />
-                        <div className='bg-slate-900 py-1 ps-4 pe-6 rounded-xl'>
+                        <img className=" rounded-full w-8 h-8 me-2 p-0.5 bg-slate-400 dark:bg-white" onError={(e) => e.currentTarget.src = commentProfile} src={comments[0]?.commentCreator?.photo} />
+                        <div className='bg-slate-300 dark:bg-slate-900 py-1 ps-4 pe-6 rounded-xl'>
                             <div className="flex">
-                                <h3 className="text-md font-semibold text-white -mb-1">{comments[0]?.commentCreator?.name}</h3>
+                                <h3 className="text-md font-semibold text-slate-950 dark:text-white -mb-1">{comments[0]?.commentCreator?.name}</h3>
                                 {userData._id === post.user._id && userData._id === comments[0].commentCreator._id &&
                                     <DropDownCommentComponent comment={comments[0]} handleUpdateComment={handleUpdateComment} getPostCommentsFunction={getPostComments} />}
                             </div>
-                            <span className='text-white/50 text-[12px] font-light'>{comments[0]?.createdAt.split("T")[0]}</span>
-                            <p className='text-white/80 text-sm mt-1'>{comments[0]?.content}</p>
+                            <span className='text-slate-800 dark:text-white/50 text-[12px] font-light'>{comments[0]?.createdAt.split("T")[0]}</span>
+                            <p className='text-slate-950 dark:text-white/80 text-md mt-1'>{comments[0]?.content}</p>
                         </div>
                     </div>
                 </div>

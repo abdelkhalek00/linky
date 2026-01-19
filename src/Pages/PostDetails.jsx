@@ -15,7 +15,7 @@ export default function PostDetails() {
   }, [postId])
   return (
     <>
-      <h2 className='text-4xl text-[#1D293D] font-medium'>Post details</h2>
+      <h2 className='text-4xl text-slate-950 dark:text-white font-medium mb-10'>Post details</h2>
       {postSelected == null ? <SkeletonComponent /> : <PostCardComponent post={postSelected} />}
     </>
   )
