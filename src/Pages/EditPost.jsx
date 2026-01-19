@@ -28,7 +28,7 @@ export default function EditPost() {
     function handlePreview(e) {
         const file = e.target.files[0]
         if (file.size > 1024 * 1024) {
-            alert("الصورة لازم تكون أقل من 1MB")
+            alert("choose another Image")
             return;
         }
         if (file) {
@@ -58,13 +58,13 @@ export default function EditPost() {
 
     return (
         <div className="w-full bg-slate-950 rounded-2xl relative p-5">
-            {isLoading && <div className='absolute inset-0 bg-white/40 flex justify-center items-center z-10'>
+            {isLoading && <div className='absolute inset-0 rounded-2xl bg-white/15 flex justify-center items-center z-10'>
                 <Spinner /></div>}
             <form onSubmit={updatePost}>
                 <Textarea className='mb-3' value={postBody} onChange={e => setPostBody(e.target.value)} />
                 {previewImage && (
                     <div className="relative">
-                        <img src={previewImage} className="rounded-md" />
+                        <img src={previewImage} className="rounded-xl h-100 w-full object-cover" />
                         <IoMdCloseCircle
                             className="absolute top-3 right-3 text-white text-2xl cursor-pointer"
                             onClick={() => {

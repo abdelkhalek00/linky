@@ -78,7 +78,7 @@ export default function UserInfo() {
           </CardFooter>
         </Card>
         {/* {userPosts.length > 0 ? userPosts.reverse().map((post) => <PostCardComponent post={post} key={post.id} />) : <SkeletonComponent />} */}
-        {isLoading ? <SkeletonComponent /> : userPosts.length === 0 ? <div><p className='text-danger text-center'>There aren't Posts</p></div> : [...userPosts].reverse().map((post) => <PostCardComponent post={post} key={post.id} />)}
+        {isLoading ? <SkeletonComponent /> : userPosts.length === 0 ? <div><p className='text-red-600 text-center'>There aren't Posts</p></div> : [...userPosts].reverse().map((post) => <PostCardComponent post={post} key={post.id} />)}
       </div>
     </>
   )

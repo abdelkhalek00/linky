@@ -9,10 +9,16 @@ import PostsContextProvider from './Context/PostsContext';
 import EditPost from './Pages/EditPost';
 import toastr from "toastr";
 import "toastr/build/toastr.min.css";
+import Register from './Pages/Register';
+import Login from './Pages/Login';
+import AuthLAyout from './Layout/AuthLAyout';
+import ProtectedRoute from './Layout/ProtectedRoute';
+import AuthProtectedRoute from './Layout/AuthProtectedRoute';
+import NotFoundPage from './Pages/NotFoundPage';
 toastr.options = {
-    closeButton: false,
-    positionClass: "toast-bottom-right",
-    timeOut: "5000",
+  closeButton: false,
+  positionClass: "toast-bottom-right",
+  timeOut: "5000",
 }
 toastr.options = {
   "closeButton": false,
@@ -35,12 +41,19 @@ toastr.options = {
 let router = createBrowserRouter([
   {
     path: '', element: <Layout />, children: [
-      { index: true, element: <FeedPage /> },
-      { path: 'user-info', element: <UserInfo /> },
-      { path: 'post-details/:postId', element: <PostDetails /> },
-      { path: 'edit-post/:postId', element: <EditPost /> }
+      { index: true, element: <ProtectedRoute><FeedPage /></ProtectedRoute> },
+      { path: 'user-info', element: <ProtectedRoute><UserInfo /></ProtectedRoute> },
+      { path: 'post-details/:postId', element: <ProtectedRoute><PostDetails /></ProtectedRoute> },
+      { path: 'edit-post/:postId', element: <ProtectedRoute><EditPost /></ProtectedRoute> },
+      { path: '*', element:<NotFoundPage/> }
     ]
   },
+  {
+    path: '', element: <AuthLAyout />, children: [
+      { path: 'register', element: <AuthProtectedRoute><Register /></AuthProtectedRoute> },
+      { path: 'login', element: <AuthProtectedRoute><Login /></AuthProtectedRoute> }
+    ]
+  }
 ])
 
 function App() {

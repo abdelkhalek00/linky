@@ -31,15 +31,15 @@ export default function CreatePostComponent() {
                 if (postImage) {
                     formData.append('image', postImage)
                 }
-                console.log(formData)
+                // console.log(formData)
                 const response = await createPostApi(formData)
-                console.log(response)
+                // console.log(response)
                 if (response.message) {
                     getallPosts()
                     setPostBody("")
                     setPostImage(null)
                     setPreviewImage("")
-                    toastr.success("Post created successfully");
+                    toastr.success("Post Created Successfully");
                 }
             } catch (err) {
                 console.log(err)
@@ -57,7 +57,7 @@ export default function CreatePostComponent() {
                     <Textarea className='mb-5' placeholder="what's in your mind" value={postBody} onChange={(e) => { setPostBody(e.target.value) }}></Textarea>
 
                     {previewImage && <div className='previewImage mb-3 relative'>
-                        <img src={previewImage} />
+                        <img className='rounded-xl h-100 w-full object-cover' src={previewImage} />
                         <IoMdCloseCircle className='absolute top-3 right-3 text-white text-2xl cursor-pointer' onClick={() => setPreviewImage('')} />
                     </div>
                     }

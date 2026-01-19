@@ -5,23 +5,24 @@ import { getLoggedUserDataApi } from "../API_Requests/API_Requests";
 export let AuthContext = createContext()
 
 export default function AuthContextProvider({ children }) {
-    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token')||null)
-    const [userData, setUserData] = useState()
-    async function getLoggedUserData(){
-        const response=await getLoggedUserDataApi()
-        console.log(response)
-        if(response.message){
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') || null)
+    const [userData, setUserData] = useState(null)
+    async function getLoggedUserData() {
+        const response = await getLoggedUserDataApi()
+        if (response.message) {
             setUserData(response.user)
         }
     }
 
-    useEffect(()=>{
-        getLoggedUserData()
-    },[])
+    useEffect(() => {
+        if (isLoggedIn != null) {
+            getLoggedUserData()
+        }
+    }, [isLoggedIn])
 
 
 
-    return <AuthContext.Provider value={{userData,setUserData,isLoggedIn,setIsLoggedIn}}>
+    return <AuthContext.Provider value={{ userData, setUserData, isLoggedIn, setIsLoggedIn }}>
         {children}
     </AuthContext.Provider>
 }
