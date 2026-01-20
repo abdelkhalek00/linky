@@ -103,7 +103,7 @@ export default function PostFooter({ post }) {
 
             <div className="addCommentForm relative">
                 <form onSubmit={isEditing ? updateComment : addComment}>
-                    <Input disabled={isLoading} className='my-3' color='default' variant='faded' placeholder='add comment' value={commentContent} onChange={(e) => setCommentContent(e.target.value)}></Input>
+                    <Input disabled={isLoading} className='my-3 text-slate-950 dark:text-white' color='default' variant='faded' placeholder='add comment' value={commentContent} onChange={(e) => setCommentContent(e.target.value)}></Input>
 
                     {isEditing ? <Button color='warning' variant='faded' isLoading={isLoading} className='absolute right-0 top-1/2 -translate-y-1/2 border-0' type='submit'>Update <IoMdSend className='text-2xl' /></Button> : <Button isLoading={isLoading} className='absolute right-0 top-1/2 -translate-y-1/2 bg-transparent' type='submit'><IoMdSend className='text-2xl cursor-pointer text-[#1D293D]' /></Button>}
                 </form>
@@ -130,7 +130,7 @@ export default function PostFooter({ post }) {
                         <div className='bg-slate-300 dark:bg-slate-900 py-1 ps-4 pe-6 rounded-xl'>
                             <div className="flex">
                                 <h3 className="text-md font-semibold text-slate-950 dark:text-white -mb-1">{comments[0]?.commentCreator?.name}</h3>
-                                {userData._id === post.user._id && userData._id === comments[0].commentCreator._id &&
+                                {userData?._id === post?.user?._id && userData?._id === comments?.[0]?.commentCreator?._id &&
                                     <DropDownCommentComponent comment={comments[0]} handleUpdateComment={handleUpdateComment} getPostCommentsFunction={getPostComments} />}
                             </div>
                             <span className='text-slate-800 dark:text-white/50 text-[12px] font-light'>{comments[0]?.createdAt.split("T")[0]}</span>

@@ -4,5 +4,5 @@ import { AuthContext } from '../Context/AuthContext'
 
 export default function ProtectedRoute({ children }) {
     const {isLoggedIn} = useContext(AuthContext)
-    return isLoggedIn ? children : <Navigate to={'/login'}/>
+    return isLoggedIn ? children : <Navigate to={'/register'}/>
 }

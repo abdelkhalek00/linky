@@ -18,7 +18,7 @@ export default function PostHeader({post}) {
                         </p>
                     </div>
                 </div>
-                {userData._id === post.user._id ? <DropDownPostComponent post={post} />:null}
+                {userData?._id === post?.user?._id ? <DropDownPostComponent post={post} />:null}
             </div>
         </>
     )

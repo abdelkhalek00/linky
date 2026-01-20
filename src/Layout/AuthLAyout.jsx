@@ -4,7 +4,7 @@ import NavbarComponent from '../Components/NavbarComponent'
 import { ThemeContext } from '../Context/ThemeContext'
 
 export default function AuthLAyout() {
-    const { theme, setTheme } = useContext(ThemeContext)
+    const { theme } = useContext(ThemeContext)
       return (
         <>
           <main className={theme=='dark'?'dark':'light'}>
