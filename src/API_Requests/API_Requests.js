@@ -2,108 +2,83 @@ import axios from "axios"
 // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNjkzMTgxMTcxMzExZmQ3YjAzMzZiYzgyIiwiaWF0IjoxNzY1OTg4NjYwfQ.DkwKeUPRh0p5HQ6d8cxIwIEAzixolX_npL6UeoNngcM'
 
 
-export async function getLoggedUserDataApi() {
-    try {
-        const { data } = await axios.get(`https://linked-posts.routemisr.com/users/profile-data`, {
-            headers: { token:localStorage.getItem('token') }
-        })
-        return data
-    } catch (err) {
-        console.log(err.response.data)
-        return err.response.data
-    }
-}
-export const getAllPostsAPi = async () => {
-    const { data } = await axios.get('https://linked-posts.routemisr.com/posts', {
-        headers: { token:localStorage.getItem('token') },
-        params: { limit: 10, sort: '-createdAt' }
+export function getLoggedUserDataApi() {
+    return axios.get(`https://linked-posts.routemisr.com/users/profile-data`, {
+        headers: { token: localStorage.getItem('token') }
     })
-    return data
+}
+export const getAllPostsAPi = () => {
+    return axios.get('https://linked-posts.routemisr.com/posts', {
+        headers: { token: localStorage.getItem('token') },
+        params: { limit: 50, sort: '-createdAt' }
+    })
 }
 
-export async function getPostDetailsApi(postId) {
-    const { data } = await axios.get(`https://linked-posts.routemisr.com/posts/${postId}`, {
-        headers: { token:localStorage.getItem('token') }
+export function getPostDetailsApi(postId) {
+    return axios.get(`https://linked-posts.routemisr.com/posts/${postId}`, {
+        headers: { token: localStorage.getItem('token') }
     })
-    return data
 }
 
-export async function getUserPostsApi(userId) {
-    const { data } = await axios.get(`https://linked-posts.routemisr.com/users/${userId}/posts`, {
-        headers: { token:localStorage.getItem('token') },
+export function getUserPostsApi(userId) {
+    return axios.get(`https://linked-posts.routemisr.com/users/${userId}/posts`, {
+        headers: { token: localStorage.getItem('token') },
     })
-    return data
 }
 
-export async function createPostApi(formData) {
-    const { data } = await axios.post('https://linked-posts.routemisr.com/posts', formData, {
+export function createPostApi(formData) {
+    return axios.post('https://linked-posts.routemisr.com/posts', formData, {
         headers: {
-            token:localStorage.getItem('token')
+            token: localStorage.getItem('token')
         }
     })
-    return data
 }
-export async function updatePostApi(postId, formData) {
-    const { data } = await axios.put(`https://linked-posts.routemisr.com/posts/${postId}`, formData, {
+export function updatePostApi(postId, formData) {
+    return axios.put(`https://linked-posts.routemisr.com/posts/${postId}`, formData, {
         headers: {
-            token:localStorage.getItem('token')
+            token: localStorage.getItem('token')
         }
     })
-    return data
 }
-export async function deletePostApi(postId) {
-    try {
-        const { data } = await axios.delete(`https://linked-posts.routemisr.com/posts/${postId}`, {
-            headers: {
-                token:localStorage.getItem('token')
-            }
-        })
-        return data
-    } catch (err) {
-        console.log(err.response.data)
-        return err.response.data
-    }
-}
-
-export async function getPostCommentsApi(postId) {
-    const { data } = await axios.get(`https://linked-posts.routemisr.com/posts/${postId}/comments`, {
-        headers: { token:localStorage.getItem('token') }
+export function deletePostApi(postId) {
+    return axios.delete(`https://linked-posts.routemisr.com/posts/${postId}`, {
+        headers: {
+            token: localStorage.getItem('token')
+        }
     })
-    return data
+}
+
+export function getPostCommentsApi(postId) {
+    return axios.get(`https://linked-posts.routemisr.com/posts/${postId}/comments`, {
+        headers: { token: localStorage.getItem('token') }
+    })
 }
 
 
 
-export async function addCommentApi(commentContent, postId) {
-    const { data } = await axios.post(`https://linked-posts.routemisr.com/comments`, {
+export function addCommentApi(commentContent, postId) {
+    return axios.post(`https://linked-posts.routemisr.com/comments`, {
         content: commentContent,
         post: postId
     }, {
-        headers: { token:localStorage.getItem('token') }
+        headers: { token: localStorage.getItem('token') }
     })
-    return data
 }
 
 
-export async function updateCommentApi(commentContent, commentId) {
-    const { data } = await axios.put(`https://linked-posts.routemisr.com/comments/${commentId}`, {
+export function updateCommentApi(commentContent, commentId) {
+    return axios.put(`https://linked-posts.routemisr.com/comments/${commentId}`, {
         content: commentContent,
     }, {
-        headers: { token:localStorage.getItem('token') }
+        headers: { token: localStorage.getItem('token') }
     })
-    return data
 }
 
-export async function deleteCommentApi(commentId) {
-    try {
-        const { data } = await axios.delete(`https://linked-posts.routemisr.com/comments/${commentId}`, {
-            headers: {
-                token:localStorage.getItem('token')
-            }
-        })
-        return data
-    } catch (err) {
-        console.log(err.response.data)
-        return err.response.data
-    }
+export function deleteCommentApi(commentId) {
+    return axios.delete(`https://linked-posts.routemisr.com/comments/${commentId}`, {
+        headers: {
+            token: localStorage.getItem('token')
+        }
+    })
+
 }

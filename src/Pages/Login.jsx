@@ -1,4 +1,4 @@
-import { Button, Input, Radio, RadioGroup, Select, SelectItem } from '@heroui/react'
+import { Button, Input, Radio, RadioGroup, Select, SelectItem, Spinner } from '@heroui/react'
 import React, { useContext, useState } from 'react'
 import { LoginFunctionApi } from '../API_Requests/AuthApi_Requests';
 import { Link, useNavigate } from 'react-router-dom';
@@ -45,13 +45,17 @@ export default function Login() {
         <>
             <div className="container w-full flex items-center">
                 <form className='w-8/10 lg:w-6/10 mx-auto max-sm:w-full' onSubmit={handleSubmit(UserLogin)}>
-                    <div className="flex flex-col flex-wrap md:flex-nowrap gap-4 p-10 translate-y-25 bg-slate-100 dark:bg-slate-950 shadow-2xl rounded-2xl">
+                    <div className="flex flex-col flex-wrap md:flex-nowrap gap-4 p-10 translate-y-25 bg-slate-100 dark:bg-slate-950 shadow-2xl rounded-2xl relative">
                         <h2 className='text-sky-800 text-2xl font-bold mb-5'>Login Form</h2>
                         <Input isInvalid={Boolean(errors.email)} errorMessage={errors.email?.message} className="text-slate-950 dark:text-white" label="Email" color='' variant='faded' type="email" {...register("email")} />
                         <Input isInvalid={Boolean(errors.password)} errorMessage={errors.password?.message} className="text-slate-950 dark:text-white" label="password" color='' variant='faded' type="password" {...register("password")} />
                         <Button isLoading={isLoading} color='primary' className='mt-3' type='submit'>Login</Button>
                         <div><p className='text-slate-800 dark:text-white/60'>if You haven't an Account Please, <Link className='text-primary' to={'/register'} >Register</Link></p></div>
                         {errorMessage && <p className='text-danger text-center'>{errorMessage}</p>}
+
+                        {isLoading&&<div className='absolute inset-0 bg-white/30 dark:bg-white/10 rounded-2xl flex justify-center items-center'>
+                            <Spinner/>
+                        </div>}
                     </div>
                 </form>
             </div>

@@ -6,6 +6,8 @@ import { createPostApi } from '../API_Requests/API_Requests';
 import { PostsContext } from '../Context/PostsContext';
 import toastr from "toastr";
 import "toastr/build/toastr.min.css";
+import { useMutation } from '@tanstack/react-query';
+import { queryClient } from '../main';
 export default function CreatePostComponent() {
     let { getallPosts } = useContext(PostsContext)
     const [previewImage, setPreviewImage] = useState("")
@@ -17,43 +19,46 @@ export default function CreatePostComponent() {
         setPreviewImage(URL.createObjectURL(e.target.files[0]))
         e.target.value = null
     }
-    async function createPost(e) {
-        e.preventDefault()
+
+    const { mutate:createPostMutate, isPending } = useMutation({
+        mutationKey: ['createPost'],
+        mutationFn: createPostApi,
+        onSuccess: () => {
+            queryClient.invalidateQueries(['getAllPosts']);
+            setPostBody('');
+            setPostImage(null);
+            setPreviewImage("");
+            toastr.success("Post Created Successfully");
+        }
+    })
+
+
+    function createPost() {
         if (postBody.length == 0) {
             toastr.error("This Field mustn't be empty")
             return;
         }
         else {
-            setIsLoading(true)
-            try {
-                const formData = new FormData();
-                formData.append('body', postBody)
-                if (postImage) {
-                    formData.append('image', postImage)
-                }
-                // console.log(formData)
-                const response = await createPostApi(formData)
-                // console.log(response)
-                if (response.message) {
-                    getallPosts()
-                    setPostBody("")
-                    setPostImage(null)
-                    setPreviewImage("")
-                    toastr.success("Post Created Successfully");
-                }
-            } catch (err) {
-                console.log(err)
-            } finally {
-                setIsLoading(false)
+            const formData = new FormData()
+            formData.append('body', postBody)
+
+            if (postImage) {
+                formData.append('image', postImage)
             }
+
+            createPostMutate(formData)
         }
     }
+
     return (
         <>
             <div className="w-full p-5 bg-slate-100 dark:bg-slate-950 rounded-2xl relative mb-10">
-                {isLoading && <div className='absolute rounded-2xl inset-0 bg-white/10 flex justify-center items-center z-10'>
+                {isPending && <div className='absolute rounded-2xl inset-0 bg-white/10 flex justify-center items-center z-10'>
                     <Spinner /></div>}
-                <form onSubmit={createPost}>
+
+
+
+                <div>
                     <Textarea className='mb-5' placeholder="what's in your mind" value={postBody} onChange={(e) => { setPostBody(e.target.value) }}></Textarea>
 
                     {previewImage && <div className='previewImage mb-3 relative'>
@@ -65,9 +70,12 @@ export default function CreatePostComponent() {
                         <label className='flex cursor-pointer' htmlFor="postImage"><IoImages className='text-2xl text-green-600 me-2' /> <span className='text-slate-700 dark:text-white/80'>Photo</span></label>
                         <Input onChange={handlePreviewImage} type='file' id='postImage' className='hidden' />
 
-                        <Button isLoading={isLoading} color='primary' type='submit'>Post</Button>
+                        <Button isLoading={isPending} color='primary' onPress={createPost}>Post</Button>
                     </div>
-                </form>
+                </div>
+
+
+
             </div>
         </>
     )

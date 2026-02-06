@@ -1,4 +1,4 @@
-import { Button, Input, Radio, RadioGroup, Select, SelectItem } from '@heroui/react'
+import { Button, Input, Radio, RadioGroup, Select, SelectItem, Spinner } from '@heroui/react'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -58,7 +58,7 @@ export default function Register() {
         <>
             <div className="container flex items-center">
                 <form className='w-8/10 lg:w-6/10 mx-auto max-sm:w-full' onSubmit={handleSubmit(userRegister)}>
-                    <div className="flex flex-col flex-wrap md:flex-nowrap gap-4 p-10 mb-5 bg-slate-100 dark:bg-slate-950 shadow-2xl rounded-2xl">
+                    <div className="flex flex-col flex-wrap md:flex-nowrap gap-4 p-10 mb-5 bg-slate-100 dark:bg-slate-950 shadow-2xl rounded-2xl relative">
                         <h2 className='text-sky-800 text-2xl font-bold mb-5'>Registration Form</h2>
                         <Input isInvalid={Boolean(errors?.name)} errorMessage={errors.name?.message} className="text-slate-950 dark:text-white" label="name" color='' variant='faded' type="text" {...register("name")} />
                         <Input isInvalid={Boolean(errors?.email)} errorMessage={errors.email?.message} className="text-slate-950 dark:text-white" label="Email" color='' variant='faded' type="email" {...register("email")} />
@@ -75,6 +75,9 @@ export default function Register() {
                         <Button isLoading={isLoading} color='primary' className='mt-3' type='submit'>Register</Button>
                         <div><p className='text-slate-800 dark:text-white/60'>if You have an Account Please, <Link className='text-sky-800' to={'/login'} >Login</Link></p></div>
                         {errorMessage && <p className='text-danger text-center'>{errorMessage}</p>}
+                        {isLoading && <div className='absolute inset-0 bg-white/30 dark:bg-white/10 rounded-2xl flex justify-center items-center'>
+                            <Spinner />
+                        </div>}
                     </div>
                 </form>
             </div>

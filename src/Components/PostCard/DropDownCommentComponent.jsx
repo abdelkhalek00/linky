@@ -1,22 +1,19 @@
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Spinner } from '@heroui/react'
-import { useContext, useState } from 'react'
 import { deleteCommentApi } from '../../API_Requests/API_Requests'
-import { PostsContext } from '../../Context/PostsContext'
-export default function DropDownCommentComponent({ comment, getPostCommentsFunction,handleUpdateComment }) {
-    const [isLoading, setIsLoading] = useState(false)
-    const { getallPosts } = useContext(PostsContext)
-    async function deleteComment(commentId) {
-        setIsLoading(true)
-        const response = await deleteCommentApi(commentId)
-        console.log(response)
-        if (response.message) {
-            await getPostCommentsFunction()
+import toastr from "toastr";
+import { useMutation } from '@tanstack/react-query'
+import { queryClient } from '../../main'
+export default function DropDownCommentComponent({ comment, handleUpdateComment, post }) {
+    const { mutate: deleteComment,isPending } = useMutation({
+        mutationFn: (commentId) => deleteCommentApi(commentId),
+        onSuccess: () => {
+            queryClient.invalidateQueries(['getPostComments', post.id])
+            toastr.error("Comment Delete Success")
         }
-        setIsLoading(false)
-    }
+    })
     return (
         <>
-            {isLoading ? <Spinner className='ms-4' /> :
+            {isPending ? <Spinner className='ms-4' /> :
                 <Dropdown>
                     <DropdownTrigger>
                         <svg className="w-16 cursor-pointer outline-0" xmlns="http://www.w3.org/2000/svg"

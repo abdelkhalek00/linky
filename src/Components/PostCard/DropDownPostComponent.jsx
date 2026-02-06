@@ -1,32 +1,33 @@
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Spinner } from '@heroui/react'
-import React, { useContext, useState } from 'react'
 import { deletePostApi } from '../../API_Requests/API_Requests'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { PostsContext } from '../../Context/PostsContext'
 import toastr from "toastr";
 import "toastr/build/toastr.min.css";
-export default function DropDownPostComponent({ post, getPostCommentsFunction }) {
-    const [isLoading, setIsLoading] = useState(false)
-    const { getallPosts } = useContext(PostsContext)
+import { useMutation } from '@tanstack/react-query'
+import { queryClient } from '../../main'
+export default function DropDownPostComponent({ post }) {
     const { pathname } = useLocation()
     const navigate = useNavigate()
-    async function deletePost(postId) {
-        setIsLoading(true)
-        const response = await deletePostApi(postId)
-        console.log(response)
-        if (response.message) {
-            toastr.success("Post Deleted Success");
-            getallPosts()
-            if (pathname.includes('post-details')) {
-                navigate('/')
-            }
+
+
+    const { mutate: deletePostMutate, isPending } = useMutation({
+        mutationKey: ['deletePost'],
+        mutationFn: deletePostApi,
+        onSuccess: () => {
+            toastr.error("Post Deleted Success");
+            queryClient.invalidateQueries(['getAllPosts'])
         }
-        setIsLoading(false)
+    })
+    function deletePost(postId) {
+        deletePostMutate(postId)
+        if (pathname.includes('post-details')) {
+            navigate('/')
+        }
     }
     return (
         <>
             {
-                isLoading ? <Spinner /> :
+                isPending ? <Spinner /> :
                     <Dropdown>
                         <DropdownTrigger>
                             <svg className="w-16 cursor-pointer outline-0" xmlns="http://www.w3.org/2000/svg"

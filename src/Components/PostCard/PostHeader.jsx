@@ -1,9 +1,15 @@
 import React, { useContext } from 'react'
 import { AuthContext } from '../../Context/AuthContext'
 import DropDownPostComponent from './DropDownPostComponent'
+import { getLoggedUserDataApi } from '../../API_Requests/API_Requests'
+import { useQuery } from '@tanstack/react-query'
 
 export default function PostHeader({post}) {
-    const { userData } = useContext(AuthContext)
+     const { data: userData } = useQuery({
+    queryKey: ['getUserData'],
+    queryFn: getLoggedUserDataApi,
+    select: (data) => data.data.user,
+  })
     return (
         <>
             <div className="w-full h-16 items-center flex justify-between ">

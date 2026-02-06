@@ -1,38 +1,51 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Card, CardHeader, CardBody, CardFooter, Avatar, Button } from "@heroui/react";
 import { AuthContext } from '../Context/AuthContext'
-import { getUserPostsApi } from '../API_Requests/API_Requests';
+import { getLoggedUserDataApi, getUserPostsApi } from '../API_Requests/API_Requests';
 import SkeletonComponent from '../Components/SkeletonComponent';
 import PostCardComponent from '../Components/PostCardComponent';
 import { MdEdit } from "react-icons/md";
 import { PostsContext } from '../Context/PostsContext';
+import { Link } from 'react-router-dom';
+import { useMutation, useQuery } from '@tanstack/react-query';
 export default function UserInfo() {
-  const { userData } = useContext(AuthContext)
+  // const { userData } = useContext(AuthContext)
   const [isFollowed, setIsFollowed] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [userPosts, setUserPosts] = useState([])
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [userPosts, setUserPosts] = useState([])
 
-  async function getUserPosts() {
-    if (!userData?._id) {
-      return;
-    }
-    try {
-      const response = await getUserPostsApi(userData._id)
-      // console.log(response)
-      if (response.message) {
-        setUserPosts(response.posts)
-      }
-    } catch (err) {
-      console.log(err)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-  useEffect(() => {
-    if (userData && userData._id) {
-      getUserPosts()
-    }
-  }, [userData,userPosts])
+  const { data: userData, isLoading: getUserDataLoading } = useQuery({
+    queryKey: ['getUserData'],
+    queryFn: getLoggedUserDataApi,
+    select: (data) => data.data.user,
+  })
+  console.log(userData?._id)
+
+
+  const { data: userPosts = [], isLoading: getUserPostsLoading, isFetched } = useQuery({
+    queryKey: ['userPosts', userData?._id],
+    queryFn: () => getUserPostsApi(userData?._id),
+    select: (data) => data.data.posts,
+    enabled: !!userData?._id,
+  })
+  console.log(userPosts)
+
+  // async function getUserPosts() {
+  //   if (!userData?._id) {
+  //     return;
+  //   }
+  //   try {
+  //     const response = await getUserPostsApi(userData._id)
+  //     // console.log(response)
+  //   } catch (err) {
+  //     console.log(err)
+  //   }
+  // }
+  // useEffect(() => {
+  //   if (userData && userData._id) {
+  //     getUserPosts()
+  //   }
+  // }, [userData, userPosts])
   return (
     <>
 
@@ -51,14 +64,16 @@ export default function UserInfo() {
                 <h5 className="text-small tracking-tight text-secondary">{userData?.email}</h5>
               </div>
             </div>
-            <Button
-              className={isFollowed ? "bg-transparent text-foreground border-default-200" : ""}
-              color="primary"
-              radius="full"
-              size="sm"
-            >
-              <MdEdit />Update Profile
-            </Button>
+            <Link to={'/update-profile-image'}>
+              <Button
+                className={isFollowed ? "bg-transparent text-foreground border-default-200" : ""}
+                color="primary"
+                radius="full"
+                size="sm"
+              >
+                <MdEdit />Update Profile
+              </Button>
+            </Link>
           </CardHeader>
           <CardBody className="px-3 py-0 text-small text-default-400 overflow-hidden space-y-2">
             <div className="flex gap-1 items-center">
@@ -77,8 +92,7 @@ export default function UserInfo() {
             </div>
           </CardFooter>
         </Card>
-        {/* {userPosts.length > 0 ? userPosts.reverse().map((post) => <PostCardComponent post={post} key={post.id} />) : <SkeletonComponent />} */}
-        {isLoading ? <SkeletonComponent /> : userPosts.length === 0 ? <div><p className='text-red-600 text-center'>There aren't Posts</p></div> : [...userPosts].reverse().map((post) => <PostCardComponent post={post} key={post.id} />)}
+        {getUserPostsLoading ? <SkeletonComponent /> : (userPosts?.length === 0 && isFetched) ? <div><p className='text-red-600 text-center'>There aren't Posts</p></div> : [...userPosts].reverse().map((post) => <PostCardComponent post={post} key={post._id} />)}
       </div>
     </>
   )
