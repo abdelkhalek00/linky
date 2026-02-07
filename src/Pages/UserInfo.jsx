@@ -29,23 +29,6 @@ export default function UserInfo() {
     enabled: !!userData?._id,
   })
   console.log(userPosts)
-
-  // async function getUserPosts() {
-  //   if (!userData?._id) {
-  //     return;
-  //   }
-  //   try {
-  //     const response = await getUserPostsApi(userData._id)
-  //     // console.log(response)
-  //   } catch (err) {
-  //     console.log(err)
-  //   }
-  // }
-  // useEffect(() => {
-  //   if (userData && userData._id) {
-  //     getUserPosts()
-  //   }
-  // }, [userData, userPosts])
   return (
     <>
 

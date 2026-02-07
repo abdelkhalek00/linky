@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { addCommentApi, getPostCommentsApi, updateCommentApi } from '../../API_Requests/API_Requests'
+import { addCommentApi, getLoggedUserDataApi, getPostCommentsApi, updateCommentApi } from '../../API_Requests/API_Requests'
 import { Button, Input } from '@heroui/react'
 import { IoMdSend } from 'react-icons/io'
 import { AuthContext } from '../../Context/AuthContext'
@@ -20,7 +20,7 @@ export default function PostFooter({ post }) {
     const { pathname } = useLocation()
     const [isLoading, setIsLoading] = useState(false)
     const [commentContent, setCommentContent] = useState("")
-    const { userData } = useContext(AuthContext)
+    // const { userData } = useContext(AuthContext)
     const [isEditing, setIsEditing] = useState(false)
     const [editCommentId, setEditCommentId] = useState(null)
     const [isLiked, setIsLiked] = useState(false)
@@ -32,10 +32,17 @@ export default function PostFooter({ post }) {
         select: (data) => data?.data?.comments
     })
 
+    const { data: userData } = useQuery({
+        queryKey: ['getUserData'],
+        queryFn: getLoggedUserDataApi,
+        select: (data) => data.data.user,
+      })
+
     const { mutate: addCommentMutate, isPending: addCommentPending } = useMutation({
         mutationFn: ({ commentContent, postId }) => addCommentApi(commentContent, postId),
         onSuccess: () => {
             queryClient.invalidateQueries(['getPostComments', post.id])
+            const userData=queryClient.invalidateQueries(['getUserData'])
             setCommentContent('')
         }
     })
@@ -120,7 +127,7 @@ export default function PostFooter({ post }) {
                     <div className='bg-slate-300 dark:bg-slate-900 py-1 ps-4 pe-6 rounded-xl'>
                         <div className="flex">
                             <h3 className="text-md font-semibold text-slate-950 dark:text-white">{comment?.commentCreator?.name}</h3>
-                            {userData._id === post.user._id && userData._id === comment.commentCreator._id &&
+                            {userData?._id === post?.user?._id && userData?._id === comment?.commentCreator?._id &&
                                 <DropDownCommentComponent comment={comment} handleUpdateComment={handleUpdateComment} getPostCommentsFunction={getPostComments} post={post} />}
                         </div>
                         <span className='text-slate-800 dark:text-white/50 text-[12px] font-light -mt-2'>{comment?.createdAt.split("T")[0]}</span>
